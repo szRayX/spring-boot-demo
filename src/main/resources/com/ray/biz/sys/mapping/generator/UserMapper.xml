@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ray.biz.sys.dao.custom.UserMapperCustom">
+    <resultMap id="BaseResultMap" type="com.ray.biz.sys.pojo.generator.User">
+        <id column="user_id" property="userId" jdbcType="BIGINT"/>
+        <result column="company_id" property="companyId" jdbcType="BIGINT"/>
+        <result column="office_id" property="officeId" jdbcType="BIGINT"/>
+        <result column="is_company_manager" property="isCompanyManager" jdbcType="BIT"/>
+        <result column="is_office_manager" property="isOfficeManager" jdbcType="BIT"/>
+        <result column="login_name" property="loginName" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="job_number" property="jobNumber" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="gender" property="gender" jdbcType="BIT"/>
+        <result column="age" property="age" jdbcType="INTEGER"/>
+        <result column="nation" property="nation" jdbcType="VARCHAR"/>
+        <result column="education" property="education" jdbcType="VARCHAR"/>
+        <result column="avatar" property="avatar" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="mobile" property="mobile" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="id_card" property="idCard" jdbcType="VARCHAR"/>
+        <result column="unit" property="unit" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="remarks" property="remarks" jdbcType="VARCHAR"/>
+        <result column="useable" property="useable" jdbcType="BIT"/>
+        <result column="source_type" property="sourceType" jdbcType="VARCHAR"/>
+        <result column="user_type" property="userType" jdbcType="VARCHAR"/>
+        <result column="agent_user" property="agentUser" jdbcType="BIGINT"/>
+        <result column="is_admin" property="isAdmin" jdbcType="BIT"/>
+        <result column="del_flag" property="delFlag" jdbcType="BIT"/>
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        `user_id`,
+        `company_id`,
+        `office_id`,
+        `is_company_manager`,
+        `is_office_manager`,
+        `login_name`,
+        `password`,
+        `job_number`,
+        `name`,
+        `gender`,
+        `age`,
+        `nation`,
+        `education`,
+        `avatar`,
+        `email`,
+        `mobile`,
+        `phone`,
+        `id_card`,
+        `unit`,
+        `address`,
+        `remarks`,
+        `useable`,
+        `source_type`,
+        `user_type`,
+        `agent_user`,
+        `is_admin`,
+        `del_flag`,
+        `create_date`
+    </sql>
+
+    <select id="getById" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from dqist_sys.user
+        where del_flag = 0
+        and `user_id` = #{id}
+    </select>
+
+    <select id="getListByIds" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from dqist_sys.user
+        where del_flag = 0
+        and `user_id` in
+        <foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <insert id="insert">
+        insert into dqist_sys.user
+        (<include refid="Base_Column_List"/>)
+        values
+        (
+        #{record.userId},
+        #{record.companyId},
+        #{record.officeId},
+        #{record.isCompanyManager},
+        #{record.isOfficeManager},
+        #{record.loginName},
+        #{record.password},
+        #{record.jobNumber},
+        #{record.name},
+        #{record.gender},
+        #{record.age},
+        #{record.nation},
+        #{record.education},
+        #{record.avatar},
+        #{record.email},
+        #{record.mobile},
+        #{record.phone},
+        #{record.idCard},
+        #{record.unit},
+        #{record.address},
+        #{record.remarks},
+        #{record.useable},
+        #{record.sourceType},
+        #{record.userType},
+        #{record.agentUser},
+        0,
+        0,
+        #{record.createDate}
+        )
+    </insert>
+
+    <insert id="insertBatch">
+        insert into dqist_sys.user
+        (<include refid="Base_Column_List"/>)
+        values
+        <foreach collection="list" item="record" index="index" separator=",">
+            (
+            #{record.userId},
+            #{record.companyId},
+            #{record.officeId},
+            #{record.isCompanyManager},
+            #{record.isOfficeManager},
+            #{record.loginName},
+            #{record.password},
+            #{record.jobNumber},
+            #{record.name},
+            #{record.gender},
+            #{record.age},
+            #{record.nation},
+            #{record.education},
+            #{record.avatar},
+            #{record.email},
+            #{record.mobile},
+            #{record.phone},
+            #{record.idCard},
+            #{record.unit},
+            #{record.address},
+            #{record.remarks},
+            #{record.useable},
+            #{record.sourceType},
+            #{record.userType},
+            #{record.agentUser},
+            0,
+            0,
+            #{record.createDate}
+            )
+        </foreach>
+    </insert>
+
+    <update id="update">
+        update dqist_sys.user
+        set
+          `company_id` = #{record.companyId},
+          `office_id` = #{record.officeId},
+          `is_company_manager` = #{record.isCompanyManager},
+          `is_office_manager` = #{record.isOfficeManager},
+          `login_name` = #{record.loginName},
+          `password` = #{record.password},
+          `job_number` = #{record.jobNumber},
+          `name` = #{record.name},
+          `gender` = #{record.gender},
+          `age` = #{record.age},
+          `nation` = #{record.nation},
+          `education` = #{record.education},
+          `avatar` = #{record.avatar},
+          `email` = #{record.email},
+          `mobile` = #{record.mobile},
+          `phone` = #{record.phone},
+          `id_card` = #{record.idCard},
+          `unit` = #{record.unit},
+          `address` = #{record.address},
+          `remarks` = #{record.remarks},
+          `useable` = #{record.useable},
+          `source_type` = #{record.sourceType},
+          `user_type` = #{record.userType},
+          `agent_user` = #{record.agentUser},
+          `is_admin` = #{record.isAdmin},
+          `del_flag` = #{record.delFlag},
+          `create_date` = #{record.createDate}
+        where `user_id` = #{record.userId}
+    </update>
+
+    <update id="updateSelective">
+        update dqist_sys.user
+        <set>
+            <if test="record.companyId!= null">
+                `company_id` = #{record.companyId},
+            </if>
+            <if test="record.officeId!= null">
+                `office_id` = #{record.officeId},
+            </if>
+            <if test="record.isCompanyManager!= null">
+                `is_company_manager` = #{record.isCompanyManager},
+            </if>
+            <if test="record.isOfficeManager!= null">
+                `is_office_manager` = #{record.isOfficeManager},
+            </if>
+            <if test="record.loginName!= null">
+                `login_name` = #{record.loginName},
+            </if>
+            <if test="record.password!= null">
+                `password` = #{record.password},
+            </if>
+            <if test="record.jobNumber!= null">
+                `job_number` = #{record.jobNumber},
+            </if>
+            <if test="record.name!= null">
+                `name` = #{record.name},
+            </if>
+            <if test="record.gender!= null">
+                `gender` = #{record.gender},
+            </if>
+            <if test="record.age!= null">
+                `age` = #{record.age},
+            </if>
+            <if test="record.nation!= null">
+                `nation` = #{record.nation},
+            </if>
+            <if test="record.education!= null">
+                `education` = #{record.education},
+            </if>
+            <if test="record.avatar!= null">
+                `avatar` = #{record.avatar},
+            </if>
+            <if test="record.email!= null">
+                `email` = #{record.email},
+            </if>
+            <if test="record.mobile!= null">
+                `mobile` = #{record.mobile},
+            </if>
+            <if test="record.phone!= null">
+                `phone` = #{record.phone},
+            </if>
+            <if test="record.idCard!= null">
+                `id_card` = #{record.idCard},
+            </if>
+            <if test="record.unit!= null">
+                `unit` = #{record.unit},
+            </if>
+            <if test="record.address!= null">
+                `address` = #{record.address},
+            </if>
+            <if test="record.remarks!= null">
+                `remarks` = #{record.remarks},
+            </if>
+            <if test="record.useable!= null">
+                `useable` = #{record.useable},
+            </if>
+            <if test="record.sourceType!= null">
+                `source_type` = #{record.sourceType},
+            </if>
+            <if test="record.userType!= null">
+                `user_type` = #{record.userType},
+            </if>
+            <if test="record.agentUser!= null">
+                `agent_user` = #{record.agentUser},
+            </if>
+            <if test="record.isAdmin!= null">
+                `is_admin` = #{record.isAdmin},
+            </if>
+            <if test="record.delFlag!= null">
+                `del_flag` = #{record.delFlag},
+            </if>
+            <if test="record.createDate!= null">
+                `create_date` = #{record.createDate},
+            </if>
+        </set>
+        where `user_id` = #{record.userId}
+    </update>
+
+    <update id="delete">
+        update dqist_sys.user
+        set del_flag = 1
+        where `user_id` = #{id}
+    </update>
+
+    <update id="deleteBatch">
+        update dqist_sys.user
+        set del_flag = 1
+        where `user_id` in
+        <foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="existById" resultType="java.lang.Long">
+        select
+            COUNT(*)
+        from dqist_sys.user
+        where del_flag = 0
+        and `user_id` = #{id}
+    </select>
+</mapper>

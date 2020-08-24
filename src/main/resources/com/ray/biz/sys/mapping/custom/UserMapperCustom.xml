@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ray.biz.sys.dao.custom.UserMapperCustom">
+
+    <sql id="whereForFindList">
+        <if test="param.userId != null">
+            AND user_id LIKE CONCAT('%',#{param.userId},'%')
+        </if>
+        <if test="param.companyId != null">
+            AND company_id LIKE CONCAT('%',#{param.companyId},'%')
+        </if>
+        <if test="param.officeId != null">
+            AND office_id LIKE CONCAT('%',#{param.officeId},'%')
+        </if>
+        <if test="param.isCompanyManager != null">
+            AND is_company_manager LIKE CONCAT('%',#{param.isCompanyManager},'%')
+        </if>
+        <if test="param.isOfficeManager != null">
+            AND is_office_manager LIKE CONCAT('%',#{param.isOfficeManager},'%')
+        </if>
+        <if test="param.loginName != null">
+            AND login_name LIKE CONCAT('%',#{param.loginName},'%')
+        </if>
+        <if test="param.password != null">
+            AND password LIKE CONCAT('%',#{param.password},'%')
+        </if>
+        <if test="param.jobNumber != null">
+            AND job_number LIKE CONCAT('%',#{param.jobNumber},'%')
+        </if>
+        <if test="param.name != null">
+            AND name LIKE CONCAT('%',#{param.name},'%')
+        </if>
+        <if test="param.gender != null">
+            AND gender LIKE CONCAT('%',#{param.gender},'%')
+        </if>
+        <if test="param.age != null">
+            AND age LIKE CONCAT('%',#{param.age},'%')
+        </if>
+        <if test="param.nation != null">
+            AND nation LIKE CONCAT('%',#{param.nation},'%')
+        </if>
+        <if test="param.education != null">
+            AND education LIKE CONCAT('%',#{param.education},'%')
+        </if>
+        <if test="param.avatar != null">
+            AND avatar LIKE CONCAT('%',#{param.avatar},'%')
+        </if>
+        <if test="param.email != null">
+            AND email LIKE CONCAT('%',#{param.email},'%')
+        </if>
+        <if test="param.mobile != null">
+            AND mobile LIKE CONCAT('%',#{param.mobile},'%')
+        </if>
+        <if test="param.phone != null">
+            AND phone LIKE CONCAT('%',#{param.phone},'%')
+        </if>
+        <if test="param.idCard != null">
+            AND id_card LIKE CONCAT('%',#{param.idCard},'%')
+        </if>
+        <if test="param.unit != null">
+            AND unit LIKE CONCAT('%',#{param.unit},'%')
+        </if>
+        <if test="param.address != null">
+            AND address LIKE CONCAT('%',#{param.address},'%')
+        </if>
+        <if test="param.remarks != null">
+            AND remarks LIKE CONCAT('%',#{param.remarks},'%')
+        </if>
+        <if test="param.useable != null">
+            AND useable LIKE CONCAT('%',#{param.useable},'%')
+        </if>
+        <if test="param.sourceType != null">
+            AND source_type LIKE CONCAT('%',#{param.sourceType},'%')
+        </if>
+        <if test="param.userType != null">
+            AND user_type LIKE CONCAT('%',#{param.userType},'%')
+        </if>
+        <if test="param.agentUser != null">
+            AND agent_user LIKE CONCAT('%',#{param.agentUser},'%')
+        </if>
+        <if test="param.isAdmin != null">
+            AND is_admin LIKE CONCAT('%',#{param.isAdmin},'%')
+        </if>
+        <if test="param.ids != null and param.ids.size() != 0">
+            AND `user_id` IN
+            <foreach collection="param.ids" item="id" index="index" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+    </sql>
+
+    <select id="find" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        dqist_sys.user
+        WHERE
+        del_flag = 0
+        <include refid="whereForFindList"/>
+        ORDER BY user_id DESC
+        <if test="param.pageSize !=0">
+            LIMIT #{param.beginItemIndex}, #{param.pageSize}
+        </if>
+    </select>
+
+    <select id="findCount" resultType="java.lang.Long">
+        SELECT
+        COUNT(*)
+        FROM
+        dqist_sys.user
+        WHERE
+        del_flag = 0
+        <include refid="whereForFindList"/>
+    </select>
+</mapper>
