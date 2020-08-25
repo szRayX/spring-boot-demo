@@ -11,6 +11,8 @@ import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.lang.reflect.Method;
 import java.util.Date;
 
@@ -33,23 +35,31 @@ public class LogAspect {
     public Object around(ProceedingJoinPoint point) {
         Object result = null;
         long beginTime = System.currentTimeMillis();
+        String level = "INFO";
+        String content = null;
         try {
             // 执行方法
             result = point.proceed();
         } catch (Throwable e) {
-            e.printStackTrace();
+            level = "ERROR";
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            e.printStackTrace(new PrintStream(baos));
+            content = baos.toString();
+//            e.printStackTrace();
         }
         // 执行时长(毫秒)
         long time = System.currentTimeMillis() - beginTime;
         // 保存日志
-        saveLog(point, time);
+        saveLog(point, time, level, content);
         return result;
     }
 
-    private void saveLog(ProceedingJoinPoint joinPoint, long time) {
+    private void saveLog(ProceedingJoinPoint joinPoint, long time, String level, String content) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
         SysLog sysLog = new SysLog();
+        sysLog.setLevel(level);
+        sysLog.setContent(content);
         Log logAnnotation = method.getAnnotation(Log.class);
         if (logAnnotation != null) {
             // 注解上的描述

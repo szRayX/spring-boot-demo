@@ -34,7 +34,10 @@ public class UserController {
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     @ResponseBody
     @Log(value = "method findById")
-    public User findById(@PathVariable("id") Long id) {
+    public User findById(@PathVariable("id") Long id) throws Exception {
+        if (id != 1) {
+            throw new Exception("id != 1.");
+        }
         return userMapperCustom.getById(id);
     }
 }
