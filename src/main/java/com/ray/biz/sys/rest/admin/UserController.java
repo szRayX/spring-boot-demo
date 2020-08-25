@@ -2,6 +2,7 @@ package com.ray.biz.sys.rest.admin;
 
 import com.ray.biz.sys.dao.custom.UserMapperCustom;
 import com.ray.biz.sys.pojo.generator.User;
+import com.ray.frame.log.Log;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +33,7 @@ public class UserController {
      */
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     @ResponseBody
+    @Log(value = "method findById")
     public User findById(@PathVariable("id") Long id) {
         return userMapperCustom.getById(id);
     }
