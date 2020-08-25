@@ -1,5 +1,6 @@
 package com.ray.frame.log;
 
+import com.ray.frame.exception.BaseException;
 import com.ray.frame.util.HttpContextUtils;
 import com.ray.frame.util.IPUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -41,17 +42,22 @@ public class LogAspect {
             // 执行方法
             result = point.proceed();
         } catch (Throwable e) {
+            // 如果是自定义的exception，则设为INFO
+            if (e instanceof BaseException) {
+                return result;
+            }
             level = "ERROR";
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             e.printStackTrace(new PrintStream(baos));
             content = baos.toString();
 //            e.printStackTrace();
+        } finally {
+            // 执行时长(毫秒)
+            long time = System.currentTimeMillis() - beginTime;
+            // 保存日志
+            saveLog(point, time, level, content);
+            return result;
         }
-        // 执行时长(毫秒)
-        long time = System.currentTimeMillis() - beginTime;
-        // 保存日志
-        saveLog(point, time, level, content);
-        return result;
     }
 
     private void saveLog(ProceedingJoinPoint joinPoint, long time, String level, String content) {

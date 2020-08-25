@@ -2,6 +2,7 @@ package com.ray.biz.sys.rest.admin;
 
 import com.ray.biz.sys.dao.custom.UserMapperCustom;
 import com.ray.biz.sys.pojo.generator.User;
+import com.ray.frame.exception.BaseException;
 import com.ray.frame.log.Log;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -34,9 +35,9 @@ public class UserController {
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     @ResponseBody
     @Log(value = "method findById")
-    public User findById(@PathVariable("id") Long id) throws Exception {
+    public User findById(@PathVariable("id") Long id) throws BaseException {
         if (id != 1) {
-            throw new Exception("id != 1.");
+            throw new BaseException("id != 1.");
         }
         return userMapperCustom.getById(id);
     }
