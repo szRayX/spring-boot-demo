@@ -33,31 +33,39 @@ public class LogAspect {
     }
 
     @Around("pointcut()")
-    public Object around(ProceedingJoinPoint point) {
+    public Object around(ProceedingJoinPoint point) throws Throwable {
         Object result = null;
         long beginTime = System.currentTimeMillis();
         String level = "INFO";
-        String content = null;
         try {
             // 执行方法
             result = point.proceed();
         } catch (Throwable e) {
             // 如果是自定义的exception，则设为INFO
             if (e instanceof BaseException) {
-                return result;
+                // 执行时长(毫秒)
+                long time = System.currentTimeMillis() - beginTime;
+                // 保存日志
+                saveLog(point, time, level, null);
+                throw e;
             }
             level = "ERROR";
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             e.printStackTrace(new PrintStream(baos));
-            content = baos.toString();
-//            e.printStackTrace();
-        } finally {
+            String content = baos.toString();
             // 执行时长(毫秒)
             long time = System.currentTimeMillis() - beginTime;
             // 保存日志
             saveLog(point, time, level, content);
-            return result;
+            throw e;
+//            e.printStackTrace();
         }
+        // 执行时长(毫秒)
+        long time = System.currentTimeMillis() - beginTime;
+        // 保存日志
+        saveLog(point, time, level, null);
+        return result;
+
     }
 
     private void saveLog(ProceedingJoinPoint joinPoint, long time, String level, String content) {
